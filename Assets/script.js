@@ -1,3 +1,6 @@
+var timerElement = document.querySelector(".timer-count");
+var startButton = document.querySelector(".start-button");
+
 function Quiz(questions) {
   this.score = 0;
   this.questions = questions;
@@ -86,3 +89,24 @@ var questions = [
 var quiz = new Quiz(questions);
 
 populate();
+
+var count = 15;
+var interval = setInterval(function(){
+  document.getElementById('count').innerHTML=count;
+  count--;
+  if (count === 0){
+    clearInterval(interval);
+    document.getElementById('count').innerHTML='Done';
+    // or...
+    alert("You're out of time!");
+  }
+}, 1000);
+
+function startGame() {
+  isWin = false;
+  timerCount = 10;
+  // Prevents start button from being clicked when round is in progress
+  startButton.disabled = true;
+  renderBlanks()
+  startTimer()
+}
