@@ -1,5 +1,7 @@
 var timerElement = document.querySelector(".timer-count");
-var startButton = document.querySelector(".start-button");
+var startButton = document.querySelector("#start-button");
+var interval;
+var count = 25;
 
 function Quiz(questions) {
   this.score = 0;
@@ -13,7 +15,8 @@ Quiz.prototype.getQuestionIndex = function() {
 
 Quiz.prototype.guess = function(answer) {
   if(this.getQuestionIndex().isCorrectAnswer(answer)) {
-      this.score++;
+      // this.score++;
+      count-=5
   }
 
   this.questionIndex++;
@@ -37,6 +40,7 @@ Question.prototype.isCorrectAnswer = function(choice) {
 
 function populate() {
   if(quiz.isEnded()) {
+    clearInterval(interval);
       showScores();
   }
   else {
@@ -72,6 +76,8 @@ function showProgress() {
 function showScores() {
   var gameOverHTML = "<h1>Result</h1>";
   gameOverHTML += "<h2 id='score'> Your scores: " + quiz.score + "</h2>";
+  gameOverHTML += "<input type='text' id='initials'>";
+  gameOverHTML += "<button id= 'submit'>Submit</button>"; 
   var element = document.getElementById("quiz");
   element.innerHTML = gameOverHTML;
 };
@@ -88,25 +94,33 @@ var questions = [
 
 var quiz = new Quiz(questions);
 
-populate();
 
-var count = 15;
-var interval = setInterval(function(){
-  document.getElementById('count').innerHTML=count;
-  count--;
-  if (count === 0){
-    clearInterval(interval);
-    document.getElementById('count').innerHTML='Done';
-    // or...
-    alert("You're out of time!");
-  }
-}, 1000);
 
+
+// var interval = setInterval(function(){
+//   document.getElementById('count').innerHTML=count;
+//   count--;
+//   if (count === 0){
+//     clearInterval(interval);
+//     document.getElementById('count').innerHTML='Done';
+    
+//     alert("You're out of time!");
+//   }
+// }, 1000);
 function startGame() {
   isWin = false;
-  timerCount = 10;
-  // Prevents start button from being clicked when round is in progress
+  interval = setInterval(function(){
+    document.querySelector(".timer-count").textContent=count;
+    count--;
+    if (count <= 0){
+      clearInterval(interval);
+      document.getElementById('count').innerHTML='Done';
+      
+      alert("You're out of time!");
+    }
+  }, 1000);
   startButton.disabled = true;
-  renderBlanks()
-  startTimer()
+  // renderBlanks()
+  populate();
 }
+startButton.addEventListener("click", startGame);
